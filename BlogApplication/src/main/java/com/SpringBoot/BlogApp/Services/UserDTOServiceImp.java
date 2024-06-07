@@ -3,8 +3,10 @@ package com.SpringBoot.BlogApp.Services;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.ModelMap;
 
 import com.SpringBoot.BlogApp.DTO.UserDTO;
 import com.SpringBoot.BlogApp.ExceptionsHandler.ResourceNotFoundException;
@@ -16,6 +18,9 @@ public class UserDTOServiceImp implements UserService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private ModelMapper modelMapper;
 
 	@Override
 	public UserDTO createUser(UserDTO userVo) {
@@ -62,25 +67,31 @@ public class UserDTOServiceImp implements UserService {
 		return listUserVo;
 	}
 	
-	private User converUserDtoVoToUserBo(UserDTO userVo) {
-		User userBo = new User();
+	public User converUserDtoVoToUserBo(UserDTO userVo) {
+		/*User userBo = new User();
 		userBo.setUserName(userVo.getUserName());
 		userBo.setEmail(userVo.getEmail());
 		userBo.setPassword(userVo.getPassword());
 		userBo.setActive(true);
 		userBo.setUserAbout(userVo.getUserAbout());
+		return userBo;*/
+		
+		// we can also do this with using ModelMapper
+		User userBo = this.modelMapper.map(userVo, User.class);
 		return userBo;
+		
 	}
 	
 	public UserDTO convertUserBoToUserDtoVo(User userBo) {
-		return UserDTO.builder()
+		/*return UserDTO.builder()
 			   .userId(userBo.getUserId())
 			   .userName(userBo.getUserName())
 			   .email(userBo.getEmail())
 			   .password(userBo.getPassword())
 			   .userAbout(userBo.getUserAbout())
-			   .build();
-			   
+			   .build();*/
+		// we can also convert using ModelMapper
+		return this.modelMapper.map(userBo, UserDTO.class);
 	}
 
 }
