@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.SpringBoot.BlogApp.DTO.UserDTO;
+import com.SpringBoot.BlogApp.ExceptionsHandler.ResourceNotFoundException;
 import com.SpringBoot.BlogApp.Models.User;
 import com.SpringBoot.BlogApp.Repositories.UserRepository;
 
@@ -22,15 +23,24 @@ public class UserDTOServiceImp implements UserService {
 
 	@Override
 	public UserDTO updateUser(UserDTO userInfo, Integer userId) {
-
+		User user = this.userRepository.findById(userId)
+				                       .orElseThrow((() -> new ResourceNotFoundException("User","id",userId)));
 		
-		return null;
+		user.setUserName(userInfo.getUserName());
+		user.setEmail(userInfo.getEmail());
+		user.setPassword(userInfo.getPassword());
+		user.setUserAbout(userInfo.getUserAbout());
+		
+		User updateUserBo = this.userRepository.save(user);
+		
+		return this.convertUserBoToUserDtoVo(updateUserBo);
 	}
 
 	@Override
 	public UserDTO getUserByUserId(Integer userId) {
-		// TODO Auto-generated method stub
-		return null;
+		User userBo = this.userRepository.findById(userId)
+                .orElseThrow((() -> new ResourceNotFoundException("User","id",userId)));
+		return this.convertUserBoToUserDtoVo(userBo);
 	}
 
 	@Override
