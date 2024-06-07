@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.SpringBoot.BlogApp.DTO.UserDTO;
 import com.SpringBoot.BlogApp.Services.UserService;
 
+import jakarta.validation.Valid;
+import lombok.val;
+
 @RestController
 @RequestMapping("/blogApp")
 public class UserController {
@@ -28,14 +31,14 @@ public class UserController {
 	
 	//create new user
 	@PostMapping("/createUser")
-	public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userVo){
+	public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userVo){
 		UserDTO createNewUser = this.userService.createUser(userVo);
 		return new ResponseEntity<>(createNewUser,HttpStatus.CREATED);
 	}
 	
 	//Put -> Update functionality
 	@PutMapping("/users/{userId}")
-	public ResponseEntity<UserDTO> updateUserInfo(@RequestBody UserDTO userVo,@PathVariable("userId") Integer uId){
+	public ResponseEntity<UserDTO> updateUserInfo(@Valid @RequestBody UserDTO userVo,@PathVariable("userId") Integer uId){
 		UserDTO updateUser = this.userService.updateUser(userVo, uId);
 		return ResponseEntity.ok(updateUser);
 	}

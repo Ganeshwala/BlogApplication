@@ -6,6 +6,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,9 +26,11 @@ public class User {
 	@SequenceGenerator(name = "userSeq",sequenceName = "uSeq",initialValue = 100,allocationSize = 1)
 	@GeneratedValue(generator = "userSeq",strategy = GenerationType.SEQUENCE)
 	private int userId;
-	
+	@Size(min = 3,max = 10,message = "userName must be greater than 3 and less than 10")
 	private String userName;
+	@Email
 	private String email;
+	@NotNull
 	private String password;
 	private boolean isActive;
 	private String userAbout;
