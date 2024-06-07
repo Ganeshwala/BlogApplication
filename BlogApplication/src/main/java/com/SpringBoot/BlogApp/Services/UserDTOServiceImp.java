@@ -1,6 +1,7 @@
 package com.SpringBoot.BlogApp.Services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -45,14 +46,18 @@ public class UserDTOServiceImp implements UserService {
 
 	@Override
 	public void deleteUserByUserId(Integer userId) {
-		// TODO Auto-generated method stub
-
+		User userBo = this.userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User","id",userId));
+		this.userRepository.delete(userBo);
+		System.out.println("User Delete successfully");
 	}
 
 	@Override
 	public List<UserDTO> getAllUsers() {
-		// TODO Auto-generated method stub
-		return null;
+		List<User> userBo = this.userRepository.findAll();
+        
+		List<UserDTO> listUserVo = userBo.stream().map(user -> this.convertUserBoToUserDtoVo(user)).collect(Collectors.toList());
+		
+		return listUserVo;
 	}
 	
 	private User converUserDtoVoToUserBo(UserDTO userVo) {
