@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.SpringBoot.BlogApp.DTO.UserDTO;
 import com.SpringBoot.BlogApp.ExceptionsHandler.ResourceNotFoundException;
 import com.SpringBoot.BlogApp.Models.User;
 import com.SpringBoot.BlogApp.Repositories.UserRepository;
 
+@Service
 public class UserDTOServiceImp implements UserService {
 	
 	@Autowired
@@ -66,6 +68,7 @@ public class UserDTOServiceImp implements UserService {
 		userBo.setEmail(userVo.getEmail());
 		userBo.setPassword(userVo.getPassword());
 		userBo.setActive(true);
+		userBo.setUserAbout(userVo.getUserAbout());
 		return userBo;
 	}
 	
@@ -75,6 +78,7 @@ public class UserDTOServiceImp implements UserService {
 			   .userName(userBo.getUserName())
 			   .email(userBo.getEmail())
 			   .password(userBo.getPassword())
+			   .userAbout(userBo.getUserAbout())
 			   .build();
 			   
 	}

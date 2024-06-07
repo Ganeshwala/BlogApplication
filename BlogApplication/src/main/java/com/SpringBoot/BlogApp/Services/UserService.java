@@ -2,8 +2,11 @@ package com.SpringBoot.BlogApp.Services;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.SpringBoot.BlogApp.DTO.UserDTO;
 
+@Service
 public interface UserService {
 
 	UserDTO createUser(UserDTO user);
