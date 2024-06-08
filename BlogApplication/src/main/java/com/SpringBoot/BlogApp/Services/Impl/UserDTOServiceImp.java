@@ -1,4 +1,4 @@
-package com.SpringBoot.BlogApp.Services;
+package com.SpringBoot.BlogApp.Services.Impl;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,6 +12,7 @@ import com.SpringBoot.BlogApp.DTO.UserDTO;
 import com.SpringBoot.BlogApp.ExceptionsHandler.ResourceNotFoundException;
 import com.SpringBoot.BlogApp.Models.User;
 import com.SpringBoot.BlogApp.Repositories.UserRepository;
+import com.SpringBoot.BlogApp.Services.UserService;
 
 @Service
 public class UserDTOServiceImp implements UserService {

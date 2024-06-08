@@ -26,7 +26,7 @@ public class User {
 	@SequenceGenerator(name = "userSeq",sequenceName = "uSeq",initialValue = 100,allocationSize = 1)
 	@GeneratedValue(generator = "userSeq",strategy = GenerationType.SEQUENCE)
 	private int userId;
-	@Size(min = 3,max = 10,message = "userName must be greater than 3 and less than 10")
+	@Size(min = 3,message = "userName must be greater than 3")
 	private String userName;
 	@Email
 	private String email;
