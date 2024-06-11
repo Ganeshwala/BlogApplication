@@ -19,6 +19,7 @@ import com.SpringBoot.BlogApp.Repositories.BlogPostRepo;
 import com.SpringBoot.BlogApp.Repositories.CategoryRepo;
 import com.SpringBoot.BlogApp.Repositories.UserRepository;
 import com.SpringBoot.BlogApp.Services.BlogPostService;
+import com.SpringBoot.BlogApp.Services.UserService;
 
 @Service
 public class BlogPostServiceImp implements BlogPostService {
@@ -34,6 +35,9 @@ public class BlogPostServiceImp implements BlogPostService {
 	
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private UserService userService;
 	
 	@Override
 	public BlogPostVo createBlogPost(BlogPostVo post,Integer userId,Integer categoryId) {
@@ -59,7 +63,30 @@ public class BlogPostServiceImp implements BlogPostService {
 	@Override
 	public BlogPostVo updateBlogPost(BlogPostVo blogPostInfo, Integer postId) {
 		BlogPost blogPost = this.blogPostRepo.findById(postId).orElseThrow((() -> new ResourceNotFoundException("BlogPost","id",postId)));
-		return null;
+		blogPost.setPostModifyDate(new Date());
+		blogPost.setImage(blogPostInfo.getImage());
+		blogPost.setPostTitle(blogPostInfo.getPostTitle());
+		blogPost.setPostContent(blogPostInfo.getPostContent());
+		
+		User userByUserNameAndEmail = null;
+		if(blogPostInfo.getUser() != null) {
+			userByUserNameAndEmail = this.userRepository.findUserByUserNameAndEmail(blogPostInfo.getUser().getUserName(), blogPostInfo.getUser().getEmail());
+			userByUserNameAndEmail.setEmail(blogPostInfo.getUser().getEmail() !=null ? blogPostInfo.getUser().getEmail() : userByUserNameAndEmail.getEmail());
+			userByUserNameAndEmail.setUserName(blogPostInfo.getUser().getUserName() !=null ? blogPostInfo.getUser().getUserName() : userByUserNameAndEmail.getUserName());
+			userByUserNameAndEmail.setUserAbout(blogPostInfo.getUser().getUserAbout() !=null ? blogPostInfo.getUser().getUserAbout() : userByUserNameAndEmail.getUserAbout());
+			userByUserNameAndEmail.setPassword(blogPostInfo.getUser().getPassword() !=null ? blogPostInfo.getUser().getPassword() : userByUserNameAndEmail.getPassword());
+			blogPost.setUserObj(userByUserNameAndEmail);
+		}
+		
+		Category category = null;
+		if(blogPostInfo.getCategory() != null) {
+			category = this.categoryRepo.findByCategoryTitleAndContent(blogPostInfo.getCategory().getCategoryTitle(), blogPostInfo.getCategory().getDescription());
+			category.setCategoryTitle(blogPostInfo.getCategory().getCategoryTitle() != null ? blogPostInfo.getCategory().getCategoryTitle() : category.getCategoryTitle());
+			category.setDescription(blogPostInfo.getCategory().getDescription() != null ? blogPostInfo.getCategory().getDescription() : category.getDescription());
+			blogPost.setCategoryObj(category);
+		}
+		
+		return this.convertBoToVo(blogPost);
 	}
 
 	@Override

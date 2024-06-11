@@ -6,9 +6,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,8 +33,36 @@ public class BlogPostController {
 	}
 	
 	@GetMapping("/user/{userId}/post")
-	public ResponseEntity<List<BlogPostVo>> getAllPosyByUserID(@PathVariable Integer userId){
+	public ResponseEntity<List<BlogPostVo>> getAllPostByUserID(@PathVariable Integer userId){
 		List<BlogPostVo> userBlogList = this.blogPostService.getBlogByUserId(userId);
 		return new ResponseEntity<List<BlogPostVo>>(userBlogList,HttpStatus.OK);
+	}
+	
+	@GetMapping("/category/{categoryId}/post")
+	public ResponseEntity<List<BlogPostVo>> getAllPostByCategoryID(@PathVariable Integer categoryId){
+		List<BlogPostVo> categoryBlogList = this.blogPostService.getBlogByCategoryId(categoryId);
+		return new ResponseEntity<List<BlogPostVo>>(categoryBlogList,HttpStatus.OK);
+	}
+	
+	@GetMapping("/posts")
+	public ResponseEntity<List<BlogPostVo>> getAllPost(){
+		return new ResponseEntity<List<BlogPostVo>>(this.blogPostService.getAllBlogs(),HttpStatus.OK);
+	}
+	
+	@GetMapping("/post/{postId}")
+	public ResponseEntity<BlogPostVo> getPostById(@PathVariable Integer postId){
+		return new ResponseEntity<>(this.blogPostService.getBlogByPostId(postId),HttpStatus.OK);
+	}
+	
+	@PutMapping("/post/{postId}")
+	public ResponseEntity<BlogPostVo> updateBlogPostInfo(@RequestBody BlogPostVo blogpost,@PathVariable Integer postId){
+		BlogPostVo updateBlogPost = this.blogPostService.updateBlogPost(blogpost, postId);
+		return new ResponseEntity<>(updateBlogPost,HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/post/{deletePostId}")
+	public ResponseEntity<?> deleteBlogPostById(@PathVariable Integer deletePostId){
+		this.blogPostService.deleteBlog(deletePostId);
+		return new ResponseEntity<Object>(Map.of("Message","Category Delete Successfully"),HttpStatus.OK);
 	}
 }
