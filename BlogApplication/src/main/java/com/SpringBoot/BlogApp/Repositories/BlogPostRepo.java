@@ -10,7 +10,7 @@ import com.SpringBoot.BlogApp.Models.User;
 
 public interface BlogPostRepo extends JpaRepository<BlogPost, Integer>{
 
-	/*List<BlogPost> findByUser(User user);
+	List<BlogPost> findByUserObj(User userObj);
 	
-	List<BlogPost> findByCategory(Category category);*/
+	List<BlogPost> findByCategoryObj(Category category);
 }

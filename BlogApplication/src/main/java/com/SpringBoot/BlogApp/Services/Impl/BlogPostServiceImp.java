@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.SpringBoot.BlogApp.DTO.BlogPostVo;
+import com.SpringBoot.BlogApp.DTO.CategoryVo;
 import com.SpringBoot.BlogApp.ExceptionsHandler.ResourceNotFoundException;
 import com.SpringBoot.BlogApp.Models.BlogPost;
 import com.SpringBoot.BlogApp.Models.Category;
@@ -82,13 +83,19 @@ public class BlogPostServiceImp implements BlogPostService {
 
 	@Override
 	public List<BlogPostVo> getBlogByCategoryId(Integer categoryId) {
-		// TODO Auto-generated method stub
-		return null;
+		Category category = this.categoryRepo.findById(categoryId).orElseThrow((() -> new ResourceNotFoundException("Category","id",categoryId)));
+		List<BlogPost> blogPost = this.blogPostRepo.findByCategoryObj(category);
+		List<BlogPostVo> blogPostList = blogPost.stream().map(post -> this.convertBoToVo(post)).collect(Collectors.toList());
+		
+		return blogPostList;
 	}
 
 	@Override
 	public List<BlogPostVo> getBlogByUserId(Integer userId) {
-		// TODO Auto-generated method stub
+		User user = this.userRepository.findById(userId).orElseThrow((() -> new ResourceNotFoundException("User","id",userId)));
+		List<BlogPost> blogPost = this.blogPostRepo.findByUserObj(user);
+		List<BlogPostVo> blogPostList = blogPost.stream().map(post -> this.convertBoToVo(post)).collect(Collectors.toList());
+		
 		return null;
 	}
 
