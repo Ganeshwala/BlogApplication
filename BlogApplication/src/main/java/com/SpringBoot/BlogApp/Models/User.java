@@ -1,9 +1,14 @@
 package com.SpringBoot.BlogApp.Models;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
@@ -34,4 +39,7 @@ public class User {
 	private String password;
 	private boolean isActive;
 	private String userAbout;
+	
+	@OneToMany(mappedBy = "userObj",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	private List<BlogPost> blogPosts;
 }
