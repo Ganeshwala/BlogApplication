@@ -2,7 +2,6 @@ package com.SpringBoot.BlogApp.Services.Impl;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.SpringBoot.BlogApp.DTO.BlogPostVo;
-import com.SpringBoot.BlogApp.DTO.CategoryVo;
 import com.SpringBoot.BlogApp.ExceptionsHandler.ResourceNotFoundException;
 import com.SpringBoot.BlogApp.Models.BlogPost;
 import com.SpringBoot.BlogApp.Models.Category;
@@ -19,7 +17,6 @@ import com.SpringBoot.BlogApp.Repositories.BlogPostRepo;
 import com.SpringBoot.BlogApp.Repositories.CategoryRepo;
 import com.SpringBoot.BlogApp.Repositories.UserRepository;
 import com.SpringBoot.BlogApp.Services.BlogPostService;
-import com.SpringBoot.BlogApp.Services.UserService;
 
 @Service
 public class BlogPostServiceImp implements BlogPostService {
@@ -35,9 +32,6 @@ public class BlogPostServiceImp implements BlogPostService {
 	
 	@Autowired
 	private ModelMapper modelMapper;
-	
-	@Autowired
-	private UserService userService;
 	
 	@Override
 	public BlogPostVo createBlogPost(BlogPostVo post,Integer userId,Integer categoryId) {
@@ -76,6 +70,7 @@ public class BlogPostServiceImp implements BlogPostService {
 			userByUserNameAndEmail.setUserAbout(blogPostInfo.getUser().getUserAbout() !=null ? blogPostInfo.getUser().getUserAbout() : userByUserNameAndEmail.getUserAbout());
 			userByUserNameAndEmail.setPassword(blogPostInfo.getUser().getPassword() !=null ? blogPostInfo.getUser().getPassword() : userByUserNameAndEmail.getPassword());
 			blogPost.setUserObj(userByUserNameAndEmail);
+			this.userRepository.save(userByUserNameAndEmail);
 		}
 		
 		Category category = null;
@@ -84,6 +79,7 @@ public class BlogPostServiceImp implements BlogPostService {
 			category.setCategoryTitle(blogPostInfo.getCategory().getCategoryTitle() != null ? blogPostInfo.getCategory().getCategoryTitle() : category.getCategoryTitle());
 			category.setDescription(blogPostInfo.getCategory().getDescription() != null ? blogPostInfo.getCategory().getDescription() : category.getDescription());
 			blogPost.setCategoryObj(category);
+			this.categoryRepo.save(category);
 		}
 		
 		return this.convertBoToVo(blogPost);
