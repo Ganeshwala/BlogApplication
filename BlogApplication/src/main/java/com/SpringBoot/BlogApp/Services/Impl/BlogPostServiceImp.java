@@ -96,7 +96,7 @@ public class BlogPostServiceImp implements BlogPostService {
 		List<BlogPost> blogPost = this.blogPostRepo.findByUserObj(user);
 		List<BlogPostVo> blogPostList = blogPost.stream().map(post -> this.convertBoToVo(post)).collect(Collectors.toList());
 		
-		return null;
+		return blogPostList;
 	}
 
 	@Override
