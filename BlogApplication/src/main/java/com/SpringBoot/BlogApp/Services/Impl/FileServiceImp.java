@@ -7,10 +7,12 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.SpringBoot.BlogApp.Services.FileService;
 
+@Service
 public class FileServiceImp implements FileService {
 
 	@Override
