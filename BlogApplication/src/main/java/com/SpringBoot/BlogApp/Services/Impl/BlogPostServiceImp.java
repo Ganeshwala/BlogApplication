@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.SpringBoot.BlogApp.DTO.BlogPostVo;
@@ -17,6 +18,7 @@ import com.SpringBoot.BlogApp.Repositories.BlogPostRepo;
 import com.SpringBoot.BlogApp.Repositories.CategoryRepo;
 import com.SpringBoot.BlogApp.Repositories.UserRepository;
 import com.SpringBoot.BlogApp.Services.BlogPostService;
+import com.SpringBoot.BlogApp.Services.FileService;
 
 @Service
 public class BlogPostServiceImp implements BlogPostService {
@@ -33,6 +35,12 @@ public class BlogPostServiceImp implements BlogPostService {
 	@Autowired
 	private ModelMapper modelMapper;
 	
+	@Autowired
+	private FileService fileService;
+	
+	@Value("${project.image}")
+	private String imageFloder;
+	
 	@Override
 	public BlogPostVo createBlogPost(BlogPostVo post,Integer userId,Integer categoryId) {
 		
@@ -46,6 +54,7 @@ public class BlogPostServiceImp implements BlogPostService {
 		if(post.getImage() == null || post.getImage().isEmpty()) {
 			blogPostBo.setImage("Default.jpg");
 		}
+		//fileService.uploadImage(imageFloder, post.getImage());
 		blogPostBo.setUserObj(user);
 		blogPostBo.setCategoryObj(category);
 		
